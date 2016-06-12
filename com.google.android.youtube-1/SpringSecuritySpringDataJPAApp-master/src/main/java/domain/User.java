@@ -1,85 +1,124 @@
 package domain;
 
-import java.io.Serializable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-@Table(name = "users")
-public class User implements Serializable {
+public class User implements UserDetails {
 
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)    
-    @Column(name="userid")
-    private Long userId;
+    private static final long serialVersionUID = 1L;
 
-	@Column(name = "username")
-    private String userName;   
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	@Column(name = "password")
-    private String password;   
+    private String username;
 
-	@Column(name = "email")
+    private String password;
+
     private String email;
-    
-	@Column(name ="enabled")
-	private int enabled;
-	
-	public User(){
-		
-	}
-	
-	public User(User user) {
-	        this.userId = user.userId;
-	        this.userName = user.userName;
-	        this.email = user.email;       
-	        this.password = user.password;
-	        this.enabled=user.enabled;        
-	}
-	
-	public int getEnabled() {
-		return enabled;
-	}
 
-	public void setEnabled(int enabled) {
-		this.enabled = enabled;
-	}	
+    private Boolean enabled = true;
 
-	public Long getUserid() {
-		return userId;
-	}
+    private Boolean accountNonLocked = true;
 
-	public void setUserid(Long userid) {
-		this.userId = userid;
-	}
-	
-	public String getPassword() {
-		return password;
-	}
+    private Boolean accountNonExpired = true;
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public String getEmail() {
-		return email;
-	}
+    private Boolean credentialsNonExpired = true;
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Role> roles;
 
-	public String getUserName() {
-		return userName;
-	}
+    public User() {
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	
-	
-  
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long userid) {
+        this.id = userid;
+    }
+
+    @Override
+    public List<Role> getAuthorities() {
+        return roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    public void setAccountNonExpired(Boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(Boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return getEnabled();
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 }
